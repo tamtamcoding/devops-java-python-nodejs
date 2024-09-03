@@ -32,7 +32,7 @@ jobs:
 
       - name: Trigger Build and Deploy Workflow
         if: env.changes_detected == 'true'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v5
         with:
           script: |
             const workflow_id = 'build-and-deploy.yml'; // name of the reusable workflow file
