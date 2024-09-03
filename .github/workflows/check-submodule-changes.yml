@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          submodules: 'true'
+          submodules: true
           fetch-depth: 0
 
       - name: Check for devops-java submodule changes
@@ -29,32 +29,9 @@ jobs:
             echo "Changes detected in devops-java submodule"
             echo "changes_detected=true" >> $GITHUB_ENV
           fi
-        shell: /usr/bin/bash -e {0}
 
-      - name: Trigger main workflows
+      - name: Trigger Build and Deploy Workflow
         if: env.changes_detected == 'true'
-        uses: actions/github-script@v6
+        uses: ./.github/workflows/build-and-deploy.yml
         with:
-          script: |
-            const workflows = await github.actions.listRepoWorkflows({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
-
-            const workflow = workflows.data.workflows.find(w => w.name === 'Build and Deploy');
-
-            if (!workflow) {
-              throw new Error('Workflow not found');
-            }
-
-            await github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: workflow.id,
-              ref: context.ref,
-              inputs: {
-                submodule: 'devops-java',
-              },
-            });
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          submodule: 'devops-java'
