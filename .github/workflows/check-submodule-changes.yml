@@ -24,14 +24,15 @@ jobs:
           git submodule update --recursive
           if git diff --quiet HEAD^ HEAD -- devops-java; then
             echo "No changes in devops-java submodule"
-            exit 0
+            echo "changes_detected=false" >> $GITHUB_ENV
           else
             echo "Changes detected in devops-java submodule"
-            exit 1
+            echo "changes_detected=true" >> $GITHUB_ENV
           fi
+        shell: /usr/bin/bash -e {0}
 
       - name: Trigger main workflows
-        if: steps.check_changes.outcome == 'failure'
+        if: env.changes_detected == 'true'
         uses: actions/github-script@v6
         with:
           script: |
