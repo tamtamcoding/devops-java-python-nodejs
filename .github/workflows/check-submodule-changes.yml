@@ -24,7 +24,7 @@ jobs:
           git submodule update --recursive
           if git diff --quiet HEAD^ HEAD -- devops-java; then
             echo "No changes in devops-java submodule"
-            echo "changes_detected=false" >> $GITHUB_ENV
+            echo "changes_detected=true" >> $GITHUB_ENV
           else
             echo "Changes detected in devops-java submodule"
             echo "changes_detected=true" >> $GITHUB_ENV
