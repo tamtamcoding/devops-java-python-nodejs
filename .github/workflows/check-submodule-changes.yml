@@ -24,7 +24,7 @@ jobs:
           git submodule update --recursive
           if git diff --quiet HEAD^ HEAD -- devops-java; then
             echo "No changes in devops-java submodule"
-            echo "changes_detected=true" >> $GITHUB_ENV
+            echo "changes_detected=false" >> $GITHUB_ENV
           else
             echo "Changes detected in devops-java submodule"
             echo "changes_detected=true" >> $GITHUB_ENV
@@ -32,6 +32,16 @@ jobs:
 
       - name: Trigger Build and Deploy Workflow
         if: env.changes_detected == 'true'
-        run: ./.github/workflows/build-and-deploy.yml
+        uses: actions/github-script@v6
         with:
-          submodule: 'devops-java'
+          script: |
+            const workflow_id = 'build-and-deploy.yml'; // name of the reusable workflow file
+            await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: workflow_id,
+              ref: context.ref,
+              inputs: {
+                submodule: 'devops-java',
+              },
+            });
