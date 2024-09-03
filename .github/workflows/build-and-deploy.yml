@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          submodules: 'true'
+          submodules: true
 
       - name: Build application
         run: ./scripts/build.sh ${{ inputs.submodule }}
