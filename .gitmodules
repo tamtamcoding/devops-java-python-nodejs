@@ -1,0 +1,9 @@
+[submodule "devops-java"]
+	path = devops-java
+	url = https://github.com/tamtamcoding/devops-java.git
+[submodule "devops-python"]
+	path = devops-python
+	url = https://github.com/tamtamcoding/devops-python.git
+[submodule "devops-node-js"]
+	path = devops-node-js
+	url = https://github.com/tamtamcoding/devops-node-js.git

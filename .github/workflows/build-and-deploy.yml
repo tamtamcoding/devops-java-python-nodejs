@@ -1,0 +1,30 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      submodule:
+        description: 'Submodule to operate on'
+        required: true
+        type: string
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - name: Build application
+        run: ./scripts/build.sh ${{ inputs.submodule }}
+
+      - name: Run tests
+        run: ./scripts/test.sh ${{ inputs.submodule }}
+
+      - name: Lint code
+        run: ./scripts/lint.sh ${{ inputs.submodule }}
+
+      - name: Deploy application
+        run: ./scripts/deploy.sh ${{ inputs.submodule }}

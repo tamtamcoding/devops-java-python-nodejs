@@ -1,0 +1,38 @@
+name: Reusable Workflows
+
+on:
+  workflow_call:
+    inputs:
+      submodule:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - name: Build
+        run: |
+          case "${{ inputs.submodule }}" in
+            java-repo)
+              cd devops-java
+              ./build.sh
+              ;;
+            python-repo)
+              cd devops-python
+              ./build.sh
+              ;;
+            nodejs-repo)
+              cd devops-nodejs
+              ./build.sh
+              ;;
+            *)
+              echo "Unknown submodule: ${{ inputs.submodule }}"
+              exit 1
+              ;;
+          esac
