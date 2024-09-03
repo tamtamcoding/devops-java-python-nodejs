@@ -36,15 +36,21 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { data: workflows } = await github.actions.listRepoWorkflows({
+            const workflows = await github.actions.listRepoWorkflows({
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            const workflowId = workflows.workflows.find(w => w.name === 'Build and Deploy').id;
+
+            const workflow = workflows.data.workflows.find(w => w.name === 'Build and Deploy');
+
+            if (!workflow) {
+              throw new Error('Workflow not found');
+            }
+
             await github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: workflowId,
+              workflow_id: workflow.id,
               ref: context.ref,
               inputs: {
                 submodule: 'devops-java',
