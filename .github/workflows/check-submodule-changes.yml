@@ -16,22 +16,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: 'true'
+          fetch-depth: 0
 
       - name: Check for devops-java submodule changes
         id: check_changes
         run: |
           git submodule update --recursive
-          if git rev-parse HEAD^ >/dev/null 2>&1; then
-            if git diff --quiet HEAD^ HEAD -- devops-java; then
-              echo "No changes in devops-java submodule"
-              exit 0
-            else
-              echo "Changes detected in devops-java submodule"
-              exit 1
-            fi
-          else
-            echo "No previous commit found. Skipping diff check."
+          if git diff --quiet HEAD^ HEAD -- devops-java; then
+            echo "No changes in devops-java submodule"
             exit 0
+          else
+            echo "Changes detected in devops-java submodule"
+            exit 1
           fi
 
       - name: Trigger main workflows
