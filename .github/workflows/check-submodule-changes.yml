@@ -32,6 +32,6 @@ jobs:
 
       - name: Trigger Build and Deploy Workflow
         if: env.changes_detected == 'true'
-        workflow_run: ./.github/workflows/build-and-deploy.yml
+        run: ./.github/workflows/build-and-deploy.yml
         with:
           submodule: 'devops-java'
