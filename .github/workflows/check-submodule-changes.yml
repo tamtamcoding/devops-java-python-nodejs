@@ -56,3 +56,5 @@ jobs:
                 submodule: 'devops-java',
               },
             });
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
